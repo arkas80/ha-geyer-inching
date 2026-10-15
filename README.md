@@ -21,7 +21,19 @@ A custom integration that reads and changes the existing Inching duration of a c
 4. Select the existing switch from the **official Tuya integration**. An entity supplied only by LocalTuya is not supported by this code.
 5. Check the newly created number entity. With the relay OFF, change a duration and verify the same value in the device's app and the real automatic shutdown on a supervised cycle.
 
-No HACS installation compatibility is claimed for this initial repository. Manual installation is documented above.
+### HACS custom repository
+
+Repository metadata is prepared for HACS; installation on a live HA instance still needs verification. This is not a listing in the default HACS catalog.
+
+1. Back up HA, including your existing `custom_components/geyer_inching` folder if installed manually.
+2. Open HACS, select the three-dot menu, then **Custom repositories**.
+3. Enter `https://github.com/arkas80/ha-geyer-inching`, choose **Integration**, and select **Add**.
+4. Find **Geyer Inching**, open it and select **Download**. Use the default branch if no release is offered.
+5. Restart Home Assistant when the water heater is off. If Geyer Inching was already configured, keep that integration entry; do not delete it or add a duplicate. Check that the existing number entity remains available.
+6. For a new installation, add **Geyer Inching** under Settings → Devices & services and select your official Tuya switch.
+
+HACS installs only the integration. The optional package below must be installed separately; it does not replace your dashboard. If HACS reports an error, retain the working manual installation and record the exact message.
+
 
 ### Confirmation behavior
 

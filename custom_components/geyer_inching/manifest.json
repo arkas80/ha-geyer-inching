@@ -3,8 +3,14 @@
   "name": "Geyer Inching",
   "version": "0.1.0",
   "config_flow": true,
-  "dependencies": ["tuya"],
+  "dependencies": [
+    "tuya"
+  ],
   "iot_class": "cloud_push",
   "requirements": [],
-  "codeowners": []
+  "codeowners": [
+    "@arkas80"
+  ],
+  "documentation": "https://github.com/arkas80/ha-geyer-inching",
+  "issue_tracker": "https://github.com/arkas80/ha-geyer-inching/issues"
 }
