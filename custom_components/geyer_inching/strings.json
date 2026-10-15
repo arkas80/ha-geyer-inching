@@ -1,0 +1,7 @@
+{
+  "config": {
+    "step": {"user": {"title": "Geyer Inching", "description": "Select the ER120WM switch already linked through Tuya. Keep Inching enabled in Smart Life.", "data": {"source_entity": "Heater switch"}}},
+    "error": {"unsupported": "Tuya is not ready, or this switch does not report the supported enabled Inching format."},
+    "abort": {"already_configured": "This device is already configured."}
+  }
+}

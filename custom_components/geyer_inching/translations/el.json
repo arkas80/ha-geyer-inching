@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Geyer Inching",
+        "description": "Επίλεξε τον διακόπτη του ER120WM από την Tuya. Το Inching πρέπει να είναι ενεργό στο Smart Life.",
+        "data": {
+          "source_entity": "Διακόπτης θερμοσίφωνα"
+        }
+      }
+    },
+    "error": {
+      "unsupported": "Η Tuya δεν είναι έτοιμη ή δεν αναφέρει την υποστηριζόμενη ενεργή μορφή Inching."
+    },
+    "abort": {
+      "already_configured": "Η συσκευή έχει ήδη προστεθεί."
+    }
+  }
+}

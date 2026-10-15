@@ -1,0 +1,176 @@
+# Replace switch.your_water_heater before installing. / Αντικατάστησε το switch.your_water_heater πριν την εγκατάσταση.
+input_number:
+  spiti_boiler_short_minutes:
+    name: Θερμοσίφωνας · Σύντομο
+    min: 5
+    max: 40
+    step: 1
+    mode: box
+    unit_of_measurement: min
+  spiti_boiler_bath_minutes:
+    name: Θερμοσίφωνας · Μπάνιο
+    min: 5
+    max: 40
+    step: 1
+    mode: box
+    unit_of_measurement: min
+  spiti_boiler_cycle_minutes:
+    name: Θερμοσίφωνας · Διάρκεια κύκλου
+    min: 5
+    max: 40
+    step: 1
+    mode: box
+    unit_of_measurement: min
+input_text:
+  spiti_boiler_program:
+    name: Θερμοσίφωνας · Πρόγραμμα
+    max: 40
+script:
+  spiti_boiler_start:
+    alias: Σπίτι · Εκκίνηση θερμοσίφωνα
+    mode: single
+    fields:
+      program:
+        name: Πρόγραμμα
+        required: true
+        selector:
+          select:
+            options:
+            - short
+            - bath
+    sequence:
+    - condition: template
+      value_template: '{{ program in [''short'', ''bath''] and is_state(''switch.your_water_heater'',
+        ''off'') }}'
+    - variables:
+        minutes: '{{ states(''input_number.spiti_boiler_short_minutes'' if program == ''short'' else ''input_number.spiti_boiler_bath_minutes'')
+          | float(0) }}'
+    - condition: template
+      value_template: '{{ 5 <= minutes | float(0) <= 40 and is_number(states(''number.geyer_inching_minutes''))
+        }}'
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.spiti_boiler_cycle_valid
+    - action: number.set_value
+      target:
+        entity_id: number.geyer_inching_minutes
+      data:
+        value: '{{ minutes }}'
+    - wait_template: '{{ is_number(states(''number.geyer_inching_minutes'')) and states(''number.geyer_inching_minutes'')
+        | float(0) == minutes | float(0) }}'
+      timeout: 00:00:30
+      continue_on_timeout: false
+    - condition: template
+      value_template: '{{ is_state(''switch.your_water_heater'', ''off'') }}'
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.spiti_boiler_cycle_minutes
+      data:
+        value: '{{ minutes }}'
+    - action: input_text.set_value
+      target:
+        entity_id: input_text.spiti_boiler_program
+      data:
+        value: '{{ ''Σύντομο'' if program == ''short'' else ''Μπάνιο'' }}'
+    - action: switch.turn_on
+      target:
+        entity_id: switch.your_water_heater
+    - wait_template: '{{ is_state(''switch.your_water_heater'', ''on'') }}'
+      timeout: 00:00:20
+      continue_on_timeout: false
+    - action: input_datetime.set_datetime
+      target:
+        entity_id: input_datetime.spiti_boiler_cycle_end
+      data:
+        timestamp: '{{ now().timestamp() + minutes | float(0) * 60 }}'
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.spiti_boiler_cycle_valid
+  spiti_boiler_stop:
+    alias: Σπίτι · Διακοπή θερμοσίφωνα
+    mode: restart
+    sequence:
+    - action: script.turn_off
+      target:
+        entity_id: script.spiti_boiler_start
+    - action: switch.turn_off
+      target:
+        entity_id: switch.your_water_heater
+automation:
+- id: spiti_boiler_capture_external_start
+  alias: Σπίτι · Εξωτερική εκκίνηση θερμοσίφωνα
+  mode: single
+  triggers:
+  - trigger: state
+    entity_id: switch.your_water_heater
+    from: 'off'
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ not is_state(''script.spiti_boiler_start'', ''on'') }}'
+  actions:
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.spiti_boiler_cycle_valid
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.spiti_boiler_program
+    data:
+      value: Χειροκίνητο
+  - if:
+    - condition: template
+      value_template: '{{ is_number(states(''number.geyer_inching_minutes'')) and 5 <= states(''number.geyer_inching_minutes'')
+        | float(0) <= 40 }}'
+    then:
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.spiti_boiler_cycle_minutes
+      data:
+        value: '{{ states(''number.geyer_inching_minutes'') | float(0) }}'
+    - action: input_datetime.set_datetime
+      target:
+        entity_id: input_datetime.spiti_boiler_cycle_end
+      data:
+        timestamp: '{{ now().timestamp() + states(''number.geyer_inching_minutes'') | float(0) * 60 }}'
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.spiti_boiler_cycle_valid
+- id: spiti_boiler_clear_estimate
+  alias: Σπίτι · Τέλος εκτίμησης θερμοσίφωνα
+  triggers:
+  - trigger: state
+    entity_id: switch.your_water_heater
+    to: 'off'
+  actions:
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.spiti_boiler_cycle_valid
+  mode: restart
+input_datetime:
+  spiti_boiler_cycle_end:
+    name: Θερμοσίφωνας · Εκτιμώμενη λήξη
+    has_date: true
+    has_time: true
+input_boolean:
+  spiti_boiler_cycle_valid:
+    name: Θερμοσίφωνας · Έγκυρη εκτίμηση κύκλου
+    initial: false
+template:
+- triggers:
+  - trigger: time_pattern
+    seconds: /10
+  - trigger: state
+    entity_id:
+    - switch.your_water_heater
+    - input_boolean.spiti_boiler_cycle_valid
+    - input_datetime.spiti_boiler_cycle_end
+  sensor:
+  - name: Spiti Boiler Remaining Estimated
+    unique_id: spiti_boiler_remaining_estimated
+    unit_of_measurement: min
+    icon: mdi:timer-outline
+    availability: '{{ is_state(''switch.your_water_heater'',''off'') or (is_state(''switch.your_water_heater'',''on'')
+      and is_state(''input_boolean.spiti_boiler_cycle_valid'',''on'') and state_attr(''input_datetime.spiti_boiler_cycle_end'',''timestamp'')
+      is number) }}'
+    state: '{% if is_state(''switch.your_water_heater'',''on'') %}{{ ([(state_attr(''input_datetime.spiti_boiler_cycle_end'',''timestamp'')
+      | float(0) - now().timestamp()) / 60, 0] | max) | round(2) }}{% else %}0{% endif %}'

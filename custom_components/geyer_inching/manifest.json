@@ -1,0 +1,10 @@
+{
+  "domain": "geyer_inching",
+  "name": "Geyer Inching",
+  "version": "0.1.0",
+  "config_flow": true,
+  "dependencies": ["tuya"],
+  "iot_class": "cloud_push",
+  "requirements": [],
+  "codeowners": []
+}
