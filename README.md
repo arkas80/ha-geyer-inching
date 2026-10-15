@@ -1,4 +1,4 @@
-# Geyer Inching for Home Assistant
+# Geyer ER120WM — Inching for Home Assistant
 
 [Ελληνικές οδηγίες](README.el.md) · English
 
@@ -23,7 +23,7 @@ A custom integration that reads and changes the existing Inching duration of a c
 
 ### HACS custom repository
 
-Repository metadata is prepared for HACS; installation on a live HA instance still needs verification. This is not a listing in the default HACS catalog.
+The user reported successful HACS installation and availability of the existing number entity after restarting HA on one ER120WM installation. This is not a listing in the default HACS catalog.
 
 1. Back up HA, including your existing `custom_components/geyer_inching` folder if installed manually.
 2. Open HACS, select the three-dot menu, then **Custom repositories**.
@@ -95,3 +95,30 @@ Include HA version, device model, integration version, and sanitized error logs.
 No open-source license has been selected yet. A public repository alone does not grant an open-source redistribution license. A license can be added by the owner before a public release.
 
 References: [HA packages](https://www.home-assistant.io/docs/configuration/packages/) · [HA scripts](https://www.home-assistant.io/docs/scripts/)
+
+
+## Physical switch: short duration by default
+The optional package restores the Short duration while OFF after a cycle, after changing Short, on HA startup and through a one-minute reconciliation check. It writes only when the duration differs and the start script is idle. HA starts wait for an in-flight restore before setting their own duration. Bath retains the user-selected duration. Replace the existing package; do not install a second copy.
+Restoration requires HA and Tuya connectivity. A physical press before restoration completes, or while communication is unavailable, uses the last stored duration, possibly Bath. This is not an unconditional guarantee for physical starts. After confirming device-side automatic shutdown, disable the conflicting old HA timer automation with the relay OFF. Verify Short while OFF, Bath during an intentional supervised cycle, and Short again after shutdown.
+
+## Real-device verification: ER120WM
+
+User-reported results from 15 October 2026, on one device. These are not independent certification or a guarantee for other firmware versions.
+
+| Check | Result |
+| --- | --- |
+| Physical start with 5-minute Inching | Automatic shutdown confirmed |
+| HA remaining-time estimate | Started and cleared after shutdown |
+| Bath selected in HA, 8 minutes | Inching changed to 8 minutes |
+| Manual shutdown during Bath | Inching returned to 5 minutes |
+| Full Bath cycle until automatic shutdown | Not yet confirmed |
+
+HA and device firmware versions have not been recorded. The 5/8-minute durations are test values, not mandatory settings.
+
+## Basic dashboard card
+
+After installing the package, add a Manual card to your dashboard and paste the [card example](examples/dashboard/boiler-card.yaml). It uses built-in cards, with duration settings, Short, Bath, Stop and estimated remaining time. Greek labels can be edited. No custom dashboard cards or author's personal dashboard are required.
+
+HACS updates the integration only. To update the package, back it up, substitute your entity IDs in the example, replace the existing package, validate configuration and restart. Do not install a duplicate package.
+
+See the [changelog](CHANGELOG.md).

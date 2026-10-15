@@ -1,0 +1,37 @@
+type: vertical-stack
+cards:
+- type: entities
+  title: Θερμοσίφωνας
+  entities:
+  - entity: input_number.spiti_boiler_short_minutes
+    name: Σύντομο · λεπτά
+  - entity: input_number.spiti_boiler_bath_minutes
+    name: Μπάνιο · λεπτά
+  - entity: number.geyer_inching_minutes
+    name: Αποθηκευμένος χρόνος Inching
+  - entity: sensor.spiti_boiler_remaining_estimated
+    name: Εκτίμηση υπολοίπου
+- type: horizontal-stack
+  cards:
+  - type: button
+    name: Σύντομο
+    icon: mdi:timer-outline
+    tap_action:
+      action: perform-action
+      perform_action: script.spiti_boiler_start
+      data:
+        program: short
+  - type: button
+    name: Μπάνιο
+    icon: mdi:shower
+    tap_action:
+      action: perform-action
+      perform_action: script.spiti_boiler_start
+      data:
+        program: bath
+  - type: button
+    name: Διακοπή
+    icon: mdi:stop
+    tap_action:
+      action: perform-action
+      perform_action: script.spiti_boiler_stop

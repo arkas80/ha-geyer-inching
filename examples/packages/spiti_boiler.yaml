@@ -1,4 +1,3 @@
-# Replace switch.your_water_heater before installing. / Αντικατάστησε το switch.your_water_heater πριν την εγκατάσταση.
 input_number:
   spiti_boiler_short_minutes:
     name: Θερμοσίφωνας · Σύντομο
@@ -42,6 +41,9 @@ script:
     - condition: template
       value_template: '{{ program in [''short'', ''bath''] and is_state(''switch.your_water_heater'',
         ''off'') }}'
+    - wait_template: '{{ is_state(''script.spiti_boiler_restore_short'', ''off'') }}'
+      timeout: 00:00:45
+      continue_on_timeout: false
     - variables:
         minutes: '{{ states(''input_number.spiti_boiler_short_minutes'' if program == ''short'' else ''input_number.spiti_boiler_bath_minutes'')
           | float(0) }}'
@@ -96,6 +98,20 @@ script:
     - action: switch.turn_off
       target:
         entity_id: switch.your_water_heater
+  spiti_boiler_restore_short:
+    alias: Σπίτι · Επαναφορά σύντομου χρόνου
+    mode: single
+    sequence:
+    - condition: template
+      value_template: '{{ is_state(''switch.your_water_heater'', ''off'') and is_state(''script.spiti_boiler_start'',
+        ''off'') and is_number(states(''input_number.spiti_boiler_short_minutes'')) and 5 <= states(''input_number.spiti_boiler_short_minutes'')
+        | float(0) <= 40 and is_number(states(''number.geyer_inching_minutes'')) and states(''number.geyer_inching_minutes'')
+        | float(0) != states(''input_number.spiti_boiler_short_minutes'') | float(0) }}'
+    - action: number.set_value
+      target:
+        entity_id: number.geyer_inching_minutes
+      data:
+        value: '{{ states(''input_number.spiti_boiler_short_minutes'') | int }}'
 automation:
 - id: spiti_boiler_capture_external_start
   alias: Σπίτι · Εξωτερική εκκίνηση θερμοσίφωνα
@@ -146,6 +162,26 @@ automation:
     target:
       entity_id: input_boolean.spiti_boiler_cycle_valid
   mode: restart
+- id: spiti_boiler_restore_short_when_idle
+  alias: Σπίτι · Σύντομος χρόνος για φυσικό διακόπτη
+  mode: single
+  triggers:
+  - trigger: state
+    entity_id: switch.your_water_heater
+    to: 'off'
+  - trigger: state
+    entity_id: script.spiti_boiler_start
+    to: 'off'
+  - trigger: state
+    entity_id:
+    - input_number.spiti_boiler_short_minutes
+    - number.geyer_inching_minutes
+  - trigger: homeassistant
+    event: start
+  - trigger: time_pattern
+    minutes: /1
+  actions:
+  - action: script.spiti_boiler_restore_short
 input_datetime:
   spiti_boiler_cycle_end:
     name: Θερμοσίφωνας · Εκτιμώμενη λήξη
