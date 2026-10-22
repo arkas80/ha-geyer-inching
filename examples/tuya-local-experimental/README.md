@@ -6,7 +6,7 @@ Tested model: Geyer ER120WM. Other models in the series may be compatible but ar
 
 Separate from the existing Cloud integration. Do not install both boiler packages: they define the same helpers, scripts and automation IDs. HACS installation of Geyer Inching does NOT install this experiment.
 
-User-tested on one ER120WM: local relay on/off; DP44 reads at 6, 7 and 8 minutes; local change 6 to 7 minutes confirmed in device diagnostics; user-observed automatic shutoff after the 7-minute cycle. The 5–40 minute expansion and per-day schedule have only offline validation. Internet-disconnected operation has not been tested.
+User-tested on one ER120WM: local relay on/off; DP44 reads at 6, 7 and 8 minutes; local change 6 to 7 minutes confirmed in device diagnostics; automatic shutoff after a 7-minute cycle. The user also tested physical-switch and Bath operation and reported restoration to the configured 7-minute Short duration. One scheduled cycle started at the configured time and stopped normally. Restoration after that scheduled cycle was not separately confirmed. The full 5–40 minute range, all weekday combinations and Internet-disconnected operation have not been tested on hardware.
 
 Back up the installed Tuya Local profile and boiler package. Append `profile-append.yaml.txt` to the existing entities list in `custom_components/tuya_local/devices/smartplugv2_energy.yaml` only for the tested device/profile (Tuya Local 2026.9.2). Do not replace the full profile with the snippet. Generic profiles may be shared by other devices. This patch can be overwritten by updates.
 
