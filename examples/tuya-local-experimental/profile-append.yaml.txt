@@ -1,0 +1,94 @@
+# BEGIN GEYER LOCAL INCHING 5-40
+  - entity: select
+    name: Geyer Inching Local TEST
+    category: config
+    icon: mdi:timer-cog-outline
+    dps:
+    - id: 44
+      type: string
+      name: option
+      optional: true
+      mapping:
+      - dps_val: AQEs
+        value: 5 min
+      - dps_val: AQFo
+        value: 6 min
+      - dps_val: AQGk
+        value: 7 min
+      - dps_val: AQHg
+        value: 8 min
+      - dps_val: AQIc
+        value: 9 min
+      - dps_val: AQJY
+        value: 10 min
+      - dps_val: AQKU
+        value: 11 min
+      - dps_val: AQLQ
+        value: 12 min
+      - dps_val: AQMM
+        value: 13 min
+      - dps_val: AQNI
+        value: 14 min
+      - dps_val: AQOE
+        value: 15 min
+      - dps_val: AQPA
+        value: 16 min
+      - dps_val: AQP8
+        value: 17 min
+      - dps_val: AQQ4
+        value: 18 min
+      - dps_val: AQR0
+        value: 19 min
+      - dps_val: AQSw
+        value: 20 min
+      - dps_val: AQTs
+        value: 21 min
+      - dps_val: AQUo
+        value: 22 min
+      - dps_val: AQVk
+        value: 23 min
+      - dps_val: AQWg
+        value: 24 min
+      - dps_val: AQXc
+        value: 25 min
+      - dps_val: AQYY
+        value: 26 min
+      - dps_val: AQZU
+        value: 27 min
+      - dps_val: AQaQ
+        value: 28 min
+      - dps_val: AQbM
+        value: 29 min
+      - dps_val: AQcI
+        value: 30 min
+      - dps_val: AQdE
+        value: 31 min
+      - dps_val: AQeA
+        value: 32 min
+      - dps_val: AQe8
+        value: 33 min
+      - dps_val: AQf4
+        value: 34 min
+      - dps_val: AQg0
+        value: 35 min
+      - dps_val: AQhw
+        value: 36 min
+      - dps_val: AQis
+        value: 37 min
+      - dps_val: AQjo
+        value: 38 min
+      - dps_val: AQkk
+        value: 39 min
+      - dps_val: AQlg
+        value: 40 min
+    - id: 1
+      type: boolean
+      name: available
+      readonly: true
+      mapping:
+      - dps_val: false
+        value: true
+      - dps_val: true
+        value: false
+      - value: false
+# END GEYER LOCAL INCHING

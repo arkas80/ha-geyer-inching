@@ -2,6 +2,14 @@
 
 [Ελληνικές οδηγίες](README.el.md) · English
 
+## Choose Cloud or Local
+
+- **Tuya Cloud:** the integration and instructions below.
+- **Tuya Local:** [experimental instructions](examples/tuya-local-experimental/README.md), with local inching and a per-day weekly schedule. Not automatically installed through HACS.
+
+Tested on **Geyer ER120WM**. Other models in the series are **unverified**, even if visually similar.
+
+
 A custom integration that reads and changes the existing Inching duration of a compatible Geyer/Tuya water-heater switch through Home Assistant's official Tuya integration. Includes an optional package for independently saved **Short** and **Bath** durations.
 
 ## Scope and status
@@ -122,3 +130,8 @@ After installing the package, add a Manual card to your dashboard and paste the 
 HACS updates the integration only. To update the package, back it up, substitute your entity IDs in the example, replace the existing package, validate configuration and restart. Do not install a duplicate package.
 
 See the [changelog](CHANGELOG.md).
+
+
+## Tuya Local experiment
+
+The integration above uses Tuya Cloud. Separate experimental local instructions and a weekly boiler package are in [Tuya Local](examples/tuya-local-experimental/README.md). Do not install both boiler packages.

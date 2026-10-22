@@ -1,3 +1,9 @@
+## Unreleased — 2026-10-22
+
+- Separate experimental Tuya Local example for ER120WM, with fixed 5–40 minute DP44 mappings and per-day scheduling.
+- User verified local On/Off, local change 6→7 minutes, and automatic shutdown after 7 minutes. Full range, new weekly schedule and disconnected-Internet use remain unverified on hardware.
+- Cloud integration code and version are unchanged.
+
 # Changelog / Ιστορικό αλλαγών
 
 ## 2026-10-15 — ER120WM package and documentation update
