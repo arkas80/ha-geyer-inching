@@ -19,3 +19,6 @@ Test while present before regular use. Preserve the native safety protections. T
 ## Dashboard helpers
 
 Add the package helpers to your own dashboard. The master is `input_boolean.spiti_boiler_schedule_enabled`. Each DAY (mon/tue/wed/thu/fri/sat/sun) has `input_boolean.spiti_boiler_DAY_enabled`, `input_datetime.spiti_boiler_DAY_time`, and `input_number.spiti_boiler_DAY_minutes`. Use `script.spiti_boiler_start` with program short/bath and `script.spiti_boiler_stop` for manual cycles. No personal dashboard is included. When the Geyer drives only an external contactor coil, its power readings do not measure the water heater load.
+
+
+When the Local select already reports the requested duration, the package skips rewriting it and the fixed 6-second wait. A changed duration still uses that wait and the existing state checks. Startup still waits for any Short restoration to finish. This optimization has offline checks only; verify it on your device.

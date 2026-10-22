@@ -201,12 +201,16 @@ script:
         ''35 min'', ''36 min'', ''37 min'', ''38 min'', ''39 min'', ''40 min''] }}'
     - variables:
         option: '{{ (minutes|int|string) ~ '' min'' }}'
-    - action: select.select_option
-      target:
-        entity_id: select.your_geyer_inching_local_test
-      data:
-        option: '{{ option }}'
-    - delay: 00:00:06
+    - if:
+      - condition: template
+        value_template: '{{ not is_state(''select.your_geyer_inching_local_test'', option) }}'
+      then:
+      - action: select.select_option
+        target:
+          entity_id: select.your_geyer_inching_local_test
+        data:
+          option: '{{ option }}'
+      - delay: 00:00:06
     - wait_template: '{{ is_state(''select.your_geyer_inching_local_test'',option) and is_state(''switch.your_water_heater_local'',''off'')
         }}'
       timeout: 00:00:20
